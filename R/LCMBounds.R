@@ -1,8 +1,4 @@
-#' Finds a Confindence Interval for the Linear Combination of 
-#'   Multinomial Probabilities
-#'
-#'Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper, rand.samps=200,opt.samps=200,search.num=10,mass=1
-#'
+#' Finds a Confindence Interval for the Linear Combination of Multinomial Probabilities
 #'
 #' @param Lhat Observed value that needs a Confidence Interval (a scalar).
 #' @param weights A list of numeric vectors that correspond to the multinomial probabilities.
@@ -11,20 +7,19 @@
 #' @param alpha.lower Not sure Yet.
 #' @param rand.samps Not sure Yet.
 #' @param opt.samps Not sure Yet.
-#' @param search.num Not sure Yet.
 #' @param mass Not sure Yet.
 #'
-#' @importFrom pracma Lcm
+#' @importFrom stats uniroot
 #' @export
 #' @examples
 #' Lhat <- 0.2
 #' weightsA <- list(c(0,1,1),c(2,0,3),c(5,3,0))
 #' samplesizes5 <- c(20,20,20)
-#' L_CI_Bounds(Lhat,weightsA,samplesizes5,rand.samps=20,opt.samps=20)
+#' LCMBounds(Lhat,weightsA,samplesizes5,rand.samps=20,opt.samps=20)
 #'
 
 LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,
-                        rand.samps=200,opt.samps=200,search.num=10,mass=1) {
+                        rand.samps=200,opt.samps=200,mass=1) {
   ####################################################################
   # Lhat is the observed statisitcs a scalar
   # weights is a list m vectors, each vector is the weights for that multinomial experiment
@@ -57,6 +52,10 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
   support <- find_support(weights,samplesizes)
   support.length <- length(support)
   
+  min.weights <- lapply(weights,minvector)
+  mid.weights <- lapply(weights,midvector)
+  max.weights <- lapply(weights,maxvector)
+  
   ###########################
   # Finding the CDF of Lhat
   ###########################
@@ -87,15 +86,34 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
   
   L.lower <- sum(unlist(min.weights)*unlist(weights))
   L.upper <- sum(unlist(max.weights)*unlist(weights))
+
+  bag <- list(
+    Lhat=Lhat,
+    Lhat.index=Lhat.index,
+    L.lower=L.lower,
+    L.upper=L.upper,
+    probability.index=probability.index,
+    weights=weights,
+    weights.lengths=weights.lengths,
+    support=support,
+    support.length=support.length,
+    samplesizes=samplesizes,
+    min.weights=min.weights,
+    mid.weights=mid.weights,
+    max.weights=max.weights,
+    alpha.upper=alpha.upper,
+    alpha.lower=alpha.lower,
+    rand.samps=rand.samps,
+    opt.samps=opt.samps,
+    mass=mass,
+    fourier.coefs=fourier.coefs
+  )
   
-  
+  print(c(bag$length.support,bag$rand.samps+2*bag$opt.samps))
   
   ############
   # start an initial search
   ############
-  
-  
-  
   
   
   #########################
@@ -106,9 +124,8 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
     upper.estError <- 0
     upper.iters <- 0
   } else {
-    testupper <- function(x) {find.alpha(x,rand.samps,opt.samps,mass)[2]-alpha.upper}
-    #  upperout <- uniroot(testupper,c(Lhat,L.upper))
-    upperout <- uniroot(testupper,c(L.lower,L.upper))
+    testupper <- function(x) {find.alpha(x,bag)[2]-alpha.upper}
+    upperout <- uniroot(testupper,c(Lhat,L.upper))
     upper.limit <- upperout$root
     upper.estError <- upperout$estim.prec
     upper.iters <- upperout$iter
@@ -122,7 +139,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
     lower.estError <- 0
     lower.iters <- 0
   } else {
-    testlower <- function(x) {find.alpha(x,rand.samps,opt.samps,mass)[1]-alpha.lower}
+    testlower <- function(x) {find.alpha(x,bag)[1]-alpha.lower}
     lowerout <- uniroot(testlower,c(L.lower,Lhat))
     lower.limit <- lowerout$root
     lower.estError <- lowerout$estim.prec
