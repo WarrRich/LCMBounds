@@ -1,4 +1,29 @@
-L_CI_Bounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,
+#' Finds a Confindence Interval for the Linear Combination of 
+#'   Multinomial Probabilities
+#'
+#'Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper, rand.samps=200,opt.samps=200,search.num=10,mass=1
+#'
+#'
+#' @param Lhat Observed value that needs a Confidence Interval (a scalar).
+#' @param weights A list of numeric vectors that correspond to the multinomial probabilities.
+#' @param samplesizes A numeric vector of the sample sizes for the K multinomial experiements.
+#' @param alpha.upper Not sure Yet.
+#' @param alpha.lower Not sure Yet.
+#' @param rand.samps Not sure Yet.
+#' @param opt.samps Not sure Yet.
+#' @param search.num Not sure Yet.
+#' @param mass Not sure Yet.
+#'
+#' @importFrom pracma Lcm
+#' @export
+#' @examples
+#' Lhat <- 0.2
+#' weightsA <- list(c(0,1,1),c(2,0,3),c(5,3,0))
+#' samplesizes5 <- c(20,20,20)
+#' L_CI_Bounds(Lhat,weightsA,samplesizes5,rand.samps=20,opt.samps=20)
+#'
+
+LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,
                         rand.samps=200,opt.samps=200,search.num=10,mass=1) {
   ####################################################################
   # Lhat is the observed statisitcs a scalar
@@ -49,16 +74,12 @@ L_CI_Bounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=a
   for (i in 1:length(weights)) {
     fourier.coefs[[i]] <- exp(-2*pi*1i*outer(probability.index[[i]]-1,(0:(support.length-1))/support.length))
   }
-  
 
   ##############################
   # Where on the support is Lhat
   ##############################
   Lhat.index <- which(support==round(Lhat,14))
   if (length(Lhat.index) < 1) return('The supplied L_hat is not a possible value')
-  
-  
-
   
   #########################
   # Finding the bounds
@@ -67,56 +88,20 @@ L_CI_Bounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=a
   L.lower <- sum(unlist(min.weights)*unlist(weights))
   L.upper <- sum(unlist(max.weights)*unlist(weights))
   
-  # Function to find the alpha value
-  find.alpha <- function(L,rand.samps,opt.samps,mass) {
-    
-    if (L == L.upper) return(c(1,0))
-    if (L == L.lower) return(c(0,1))
-    alpha.values <- matrix(NA,ncol=length(support),nrow=rand.samps+2*opt.samps)
-    random.probs <- vector("list",length=rand.samps+opt.samps)
-    for (i in 1:rand.samps) {
-      random.probs[[i]] <- rDirichDraw(mass,L,weights,min.weights,mid.weights,max.weights,weights.lengths)
-      #print(random.probs[[i]])
-      alpha.values[i,] <- cumsum(PMF.of.Lhat(random.probs[[i]]))
-    }
-    for (i in (rand.samps+1):(rand.samps+opt.samps)) {
-      starting.p <- random.probs[[which.max(alpha.values[1:i,Lhat.index])]]
-      changing.mass <- log((i+1)/2)
-      #print(starting.p)
-      random.probs[[i]] <- rDirichDraw(Map('*',changing.mass,starting.p),
-                                       L,weights,min.weights,mid.weights,max.weights,weights.lengths)
-      alpha.values[i,] <- cumsum(PMF.of.Lhat(random.probs[[i]]))
-    }
-    #
-    #
-    ### Need an if statement to catch Lhat.index-1 bad values
-    #
-    #
-    if (Lhat.index <= 1) Lhat.index <- Lhat.index+1
-    #
-    
-    for (i in (rand.samps+opt.samps+1):(rand.samps+2*opt.samps)) {
-      starting.p <- random.probs[[which.min(alpha.values[1:i,Lhat.index-1])]]
-      changing.mass <- log((i-opt.samps+1)/2)
-      #print(starting.p)
-      random.probs[[i]] <- rDirichDraw(Map('*',changing.mass,starting.p),
-                                       L,weights,min.weights,mid.weights,max.weights,weights.lengths)
-      alpha.values[i,] <- cumsum(PMF.of.Lhat(random.probs[[i]]))
-    }
-    c(1-min(alpha.values[,Lhat.index-1]),max(alpha.values[,Lhat.index]))
-  }
   
-  #starting.point <- find.alpha(Lhat,rand.samps,opt.samps,mass)
-  #explore.lower <- find.alpha((Lhat+L.lower)/2,rand.samps,opt.samps,mass)[1]
+  
+  ############
+  # start an initial search
+  ############
+  
+  
+  
+  
   
   #########################
   # Finding the upper bound
   #########################
-  if (alpha.upper == 0) {
-    upper.limit <- L.upper
-    upper.estError <- 0
-    upper.iters <- 0
-  } else if (Lhat == L.upper) {
+  if (alpha.upper == 0 | Lhat == L.upper) {
     upper.limit <- L.upper
     upper.estError <- 0
     upper.iters <- 0
@@ -132,11 +117,7 @@ L_CI_Bounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=a
   #########################
   # Finding the lower bound
   #########################
-  if (alpha.lower == 0) {
-    lower.limit <- L.lower
-    lower.estError <- 0
-    lower.iters <- 0
-  } else if (Lhat == L.lower) {
+  if (alpha.lower == 0 | Lhat == L.lower) {
     lower.limit <- L.lower
     lower.estError <- 0
     lower.iters <- 0
@@ -155,6 +136,7 @@ L_CI_Bounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=a
     conf.int=c(lower.limit,upper.limit),
     #estError=c(lower.estError,upper.estError),
     iters = c(lower.iters,upper.iters),
+    limits = c(L.lower,L.upper),
     time = Sys.time()-start.time
   )
 }

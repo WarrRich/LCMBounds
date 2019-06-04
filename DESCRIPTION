@@ -1,0 +1,13 @@
+Package: LCMBounds
+Type: Package
+Title: Confidence Intervals for a Linear Combination of Multinomial Probabilities
+Version: 0.1.0
+Authors@R: c(person(given="Richard L.",family="Warr",role=c("aut","cre"),email="warr@stat.byu.edu"))
+Description: Not Sure Yet.
+    Please see the paper (CITATION) for details.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: pracma (>= 2.2.2)
+RoxygenNote: 6.1.1
+Suggests: testthat
