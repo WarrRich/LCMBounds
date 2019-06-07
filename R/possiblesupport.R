@@ -37,5 +37,5 @@ possible.support <- function(weights,samplesizes) {
       supp <- unique(as.vector(outer(supp,tempsupp[[i]],FUN=function(x,y) x+y)))
     }
   }
-  sort(unique(round(supp,15)))
+  sort(unique(round(supp,14)))
 }
