@@ -12,14 +12,14 @@
 #' @importFrom stats uniroot
 #' @export
 #' @examples
-#' Lhat <- 0.2
+#' Lhat <- 7.8
 #' weightsA <- list(c(0,1,1),c(2,0,3),c(5,3,0))
 #' samplesizes5 <- c(20,20,20)
-#' LCMBounds(Lhat,weightsA,samplesizes5,rand.samps=20,opt.samps=20)
+#' LCMBounds(Lhat,weightsA,samplesizes5,rand.samps=100,opt.samps=20,mass=0.1)
 #'
 
 LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,
-                        rand.samps=200,opt.samps=200,mass=1) {
+                        rand.samps=200,opt.samps=200,mass=1,power.of.2=TRUE) {
   ####################################################################
   # Lhat is the observed statisitcs a scalar
   # weights is a list m vectors, each vector is the weights for that multinomial experiment
@@ -49,7 +49,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
   ############################
   # Find the support of Lhat
   ############################
-  support <- find_support(weights,samplesizes)
+  support <- find_support(weights,samplesizes,power.of.2)
   support.length <- length(support)
   
   min.weights <- lapply(weights,minvector)
@@ -108,9 +108,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
     mass=mass,
     fourier.coefs=fourier.coefs
   )
-  
-  print(c(bag$length.support,bag$rand.samps+2*bag$opt.samps))
-  
+
   ############
   # start an initial search
   ############
@@ -153,7 +151,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
     conf.int=c(lower.limit,upper.limit),
     #estError=c(lower.estError,upper.estError),
     iters = c(lower.iters,upper.iters),
-    limits = c(L.lower,L.upper),
+    LhatSupport = c(L.lower,L.upper),
     time = Sys.time()-start.time
   )
 }
