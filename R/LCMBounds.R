@@ -51,6 +51,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
   ############################
   support <- find_support(weights,samplesizes,power.of.2)
   support.length <- length(support)
+  poss.support <- possible.support(weights,samplesizes)
   
   min.weights <- lapply(weights,minvector)
   mid.weights <- lapply(weights,midvector)
@@ -62,7 +63,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
   
   # Find where the weights fall on the support
   probability.index <- vector("list",length=length(weights))
-  for(i in 1:length(weights)) {
+  for (i in 1:length(weights)) {
     for (j in 1:length(weights[[i]])) {
       probability.index[[i]][j] <- which(round(weights[[i]][j]/samplesizes[i],14)==support)
     }
@@ -79,6 +80,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
   ##############################
   Lhat.index <- which(support==round(Lhat,14))
   if (length(Lhat.index) < 1) return('The supplied L_hat is not a possible value')
+  if (length(which(poss.support==round(Lhat,14)))<1) return('The supplied L_hat is not a possible value')
   
   #########################
   # Finding the bounds

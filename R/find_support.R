@@ -24,8 +24,8 @@ find_support <- function(weights,samplesizes,power.of.2=TRUE) {
   for (i in 1:length(samplesizes)) {
     lcm <- Lcm(lcm,samplesizes[i])
   }
-  minval <- sum(unlist(lapply(weightsD,min)))
-  maxval <- sum(unlist(lapply(weightsD,max)))
+  minval <- sum(unlist(lapply(weights,min)))
+  maxval <- sum(unlist(lapply(weights,max)))
   support <- seq(from=minval,to=maxval,by = 1/lcm)
   if (power.of.2) {
     # making the length of the support a power of 2
