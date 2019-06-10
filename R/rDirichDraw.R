@@ -1,9 +1,11 @@
-#########################################################################
-# Function to draw 'random' probabilitiy vectors fixed a particular L   #
-#########################################################################
-# Inputs are: ?????????????????
-#
-#rDirichDraw <- function(mass,L,weights,min.weights,mid.weights,max.weights,weights.lengths) {
+#'  Function to draw 'random' probability vectors fixed at a particular L
+#'
+#' @param mass Not sure Yet.
+#' @param L Not sure Yet.
+#' @param bag Not sure Yet.
+#'
+#' @importFrom stats rgamma
+
 rDirichDraw <- function(mass,L,bag) {
   # mass is a scalar, L is a scalar
   gammas <- bag$weights

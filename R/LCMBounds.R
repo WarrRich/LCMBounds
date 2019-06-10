@@ -125,7 +125,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
     upper.iters <- 0
   } else {
     testupper <- function(x) {find.alpha(x,bag)[2]-alpha.upper}
-    upperout <- uniroot(testupper,c(Lhat,L.upper))
+    upperout <- uniroot(testupper,c(L.lower,L.upper))
     upper.limit <- upperout$root
     upper.estError <- upperout$estim.prec
     upper.iters <- upperout$iter
@@ -140,7 +140,7 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
     lower.iters <- 0
   } else {
     testlower <- function(x) {find.alpha(x,bag)[1]-alpha.lower}
-    lowerout <- uniroot(testlower,c(L.lower,Lhat))
+    lowerout <- uniroot(testlower,c(L.lower,L.upper))
     lower.limit <- lowerout$root
     lower.estError <- lowerout$estim.prec
     lower.iters <- lowerout$iter
