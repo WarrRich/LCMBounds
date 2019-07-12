@@ -78,9 +78,9 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
   ##############################
   # Where on the support is Lhat
   ##############################
-  Lhat.index <- which(support==round(Lhat,14))
+  Lhat.index <- which(round(support,14)==round(Lhat,14))
   if (length(Lhat.index) < 1) return('The supplied L_hat is not a possible value')
-  if (length(which(poss.support==round(Lhat,14)))<1) return('The supplied L_hat is not a possible value')
+  if (length(which(round(poss.support,14)==round(Lhat,14)))<1) return('The supplied L_hat is not a possible value')
   
   #########################
   # Finding the bounds
