@@ -3,7 +3,7 @@
 #' @param mass Not sure Yet.
 #' @param L Not sure Yet.
 #' @param bag Not sure Yet.
-#'
+#' 
 #' @importFrom stats rgamma
 
 rDirichDraw <- function(mass,L,bag) {
