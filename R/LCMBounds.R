@@ -79,8 +79,6 @@ LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alp
   # Where on the support is Lhat
   ##############################
   Lhat.index <- which(round(support,12)==round(Lhat,12))
-  print(round(Lhat,3))
-  print(round(support,3))
   if (length(Lhat.index) < 1) return('The supplied L_hat is not a possible value')
   if (length(which(round(poss.support,12)==round(Lhat,12)))<1) return('The supplied L_hat is not on the support')
   
