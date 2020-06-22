@@ -2,22 +2,19 @@
 % Please edit documentation in R/find_support.R
 \name{find_support}
 \alias{find_support}
-\title{Sample from the Posterior Distribution of the Linear Gaussian Feature
-Allocation Model}
+\title{Short Title description}
 \usage{
-find_support(weights, samplesizes, power2 = TRUE)
+find_support(weights, samplesizes, power.of.2 = TRUE)
 }
 \arguments{
 \item{weights}{A list of numeric vectors that correspond to the multinomial probabilities.}
 
 \item{samplesizes}{A numeric vector of the multinomial sample sizes.}
 
-\item{power2}{logical variable that if set to TRUE will return a support whose length is a power of 2.}
+\item{power.of.2}{logical variable that if set to TRUE will return a support whose length is a power of 2.}
 }
 \description{
-This function samples from the posterior distribution of the linear Gaussian
-latent feature model (LGLFM) using an Indian buffet process (IBP) prior on
-the feature allocations.
+Long Description.
 }
 \examples{
 weights <- list(c(0,1,1),c(2,0,3),c(5,3,0))

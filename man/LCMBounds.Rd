@@ -6,7 +6,7 @@
 \usage{
 LCMBounds(Lhat, weights, samplesizes, alpha.upper = 0.025,
   alpha.lower = alpha.upper, rand.samps = 200, opt.samps = 200,
-  mass = 1)
+  mass = 1, power.of.2 = TRUE)
 }
 \arguments{
 \item{Lhat}{Observed value that needs a Confidence Interval (a scalar).}
@@ -29,9 +29,9 @@ LCMBounds(Lhat, weights, samplesizes, alpha.upper = 0.025,
 Finds a Confindence Interval for the Linear Combination of Multinomial Probabilities
 }
 \examples{
-Lhat <- 0.2
+Lhat <- 7.8
 weightsA <- list(c(0,1,1),c(2,0,3),c(5,3,0))
 samplesizes5 <- c(20,20,20)
-LCMBounds(Lhat,weightsA,samplesizes5,rand.samps=20,opt.samps=20)
+LCMBounds(Lhat,weightsA,samplesizes5,rand.samps=100,opt.samps=20,mass=0.1)
 
 }
