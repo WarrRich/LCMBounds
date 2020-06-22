@@ -4,9 +4,17 @@
 \alias{LCMBounds}
 \title{Finds a Confindence Interval for the Linear Combination of Multinomial Probabilities}
 \usage{
-LCMBounds(Lhat, weights, samplesizes, alpha.upper = 0.025,
-  alpha.lower = alpha.upper, rand.samps = 200, opt.samps = 200,
-  mass = 1, power.of.2 = TRUE)
+LCMBounds(
+  Lhat,
+  weights,
+  samplesizes,
+  alpha.upper = 0.025,
+  alpha.lower = alpha.upper,
+  rand.samps = 200,
+  opt.samps = 200,
+  mass = 1,
+  power.of.2 = TRUE
+)
 }
 \arguments{
 \item{Lhat}{Observed value that needs a Confidence Interval (a scalar).}

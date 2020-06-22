@@ -9,5 +9,5 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends: pracma (>= 2.2.2)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Suggests: testthat
