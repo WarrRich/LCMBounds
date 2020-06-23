@@ -2,7 +2,7 @@
 % Please edit documentation in R/LCMBounds.R
 \name{LCMBounds}
 \alias{LCMBounds}
-\title{Finds a Confindence Interval for the Linear Combination of Multinomial Probabilities}
+\title{Finds an exact confindence interval for a linear combination of multinomial probabilities}
 \usage{
 LCMBounds(
   Lhat,
@@ -10,36 +10,38 @@ LCMBounds(
   samplesizes,
   alpha.upper = 0.025,
   alpha.lower = alpha.upper,
-  rand.samps = 200,
-  opt.samps = 200,
+  rand.samps = 20,
+  opt.samps = 20,
   mass = 1,
   power.of.2 = TRUE
 )
 }
 \arguments{
-\item{Lhat}{Observed value that needs a Confidence Interval (a scalar).}
+\item{Lhat}{Observed value of a linear combination of multinomial probabilities that needs a confidence interval (a scalar).}
 
 \item{weights}{A list of numeric vectors that correspond to the multinomial probabilities.}
 
-\item{samplesizes}{A numeric vector of the sample sizes for the K multinomial experiements.}
+\item{samplesizes}{A numeric vector of length K, each entry in the vector cooresponds to the sample sizes for the K multinomial experiements.}
 
-\item{alpha.upper}{Not sure Yet.}
+\item{alpha.upper}{The amount of probability outside the upper limit of the confidence interval (this produces a (1-alpha.upper-alpha.lower)% CI).}
 
-\item{alpha.lower}{Not sure Yet.}
+\item{alpha.lower}{The amount of probability outside the lower limit of the confidence interval.}
 
-\item{rand.samps}{Not sure Yet.}
+\item{rand.samps}{A scalar which directs the alogrithm on how many random samples to try before beginning the optimizing stage.}
 
-\item{opt.samps}{Not sure Yet.}
+\item{opt.samps}{A scalar which directs the alogrithm on how many optimizing steps to make.}
 
-\item{mass}{Not sure Yet.}
+\item{mass}{A scalar tuning parameter.  It is not recommended to change it from the default.}
+
+\item{power.of.2}{A logical tuning parameter.  It is not recommended to change it from the default.}
 }
 \description{
-Finds a Confindence Interval for the Linear Combination of Multinomial Probabilities
+Finds an exact confindence interval for a linear combination of multinomial probabilities
 }
 \examples{
 Lhat <- 7.8
 weightsA <- list(c(0,1,1),c(2,0,3),c(5,3,0))
-samplesizes5 <- c(20,20,20)
-LCMBounds(Lhat,weightsA,samplesizes5,rand.samps=100,opt.samps=20,mass=0.1)
+samplesizes <- c(20,20,20)
+LCMBounds(Lhat,weightsA,samplesizes)
 
 }
