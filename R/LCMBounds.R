@@ -3,7 +3,7 @@
 #' @param Lhat Observed value of a linear combination of multinomial probabilities that needs a confidence interval (a scalar).
 #' @param weights A list of numeric vectors that correspond to the multinomial probabilities.
 #' @param samplesizes A numeric vector of length K, each entry in the vector cooresponds to the sample sizes for the K multinomial experiements.
-#' @param alpha.upper The amount of probability outside the upper limit of the confidence interval (this produces a (1-alpha.upper-alpha.lower)% CI).
+#' @param alpha.upper The amount of probability outside the upper limit of the confidence interval (this produces a (1-alpha.upper-alpha.lower)\% CI).
 #' @param alpha.lower The amount of probability outside the lower limit of the confidence interval.
 #' @param rand.samps A scalar which directs the alogrithm on how many random samples to try before beginning the optimizing stage.
 #' @param opt.samps A scalar which directs the alogrithm on how many optimizing steps to make.
@@ -19,8 +19,7 @@
 #' LCMBounds(Lhat,weightsA,samplesizes)
 #'
 
-LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,
-                        rand.samps=20,opt.samps=20,mass=1,power.of.2=TRUE) {
+LCMBounds <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,rand.samps=20,opt.samps=20,mass=1,power.of.2=TRUE) {
 
   ##########################################
   # Tests to ensure the inputs are valid

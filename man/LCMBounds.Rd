@@ -23,7 +23,7 @@ LCMBounds(
 
 \item{samplesizes}{A numeric vector of length K, each entry in the vector cooresponds to the sample sizes for the K multinomial experiements.}
 
-\item{alpha.upper}{The amount of probability outside the upper limit of the confidence interval (this produces a (1-alpha.upper-alpha.lower)% CI).}
+\item{alpha.upper}{The amount of probability outside the upper limit of the confidence interval (this produces a (1-alpha.upper-alpha.lower)\% CI).}
 
 \item{alpha.lower}{The amount of probability outside the lower limit of the confidence interval.}
 
