@@ -123,7 +123,14 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
 
   best.upper.L <- rep(NA,num.iters)
   for (i in 1:num.iters) {
-    random.start <- rDirichDraw(1,Lhat,bag)
+    if (Lhat==L.lower) {
+      start <- mean(poss.support[1:2])
+    } else if (Lhat==L.upper) {
+      start <- mean(poss.support[length(poss.support)-c(0,1)]) 
+    } else {
+      start <- Lhat
+    }
+    random.start <- rDirichDraw(1,start,bag)
     best.upper.L[i] <- -optim(opt.transform(random.start),upper.target,bag=bag)$val
   }
   upper.limit <- max(best.upper.L)
@@ -150,13 +157,24 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
     if (!test) return(L.upper)
     probs <- lapply(x,include.prob)
     Lvalue <- sum(unlist(probs)*unlist(weights))
-    val <- 1-cumsum(PMF.of.Lhat(probs,bag))[bag$Lhat.index-1]
+    if (bag$Lhat.index==1) {
+      val <- 1
+    } else {
+      val <- 1-cumsum(PMF.of.Lhat(probs,bag))[bag$Lhat.index-1]
+    }
     ifelse (val < alpha.lower,L.upper,Lvalue)
   }
 
   best.lower.L <- rep(NA,num.iters)
   for (i in 1:num.iters) {
-    random.start <- rDirichDraw(1,Lhat,bag)
+    if (Lhat==L.lower) {
+      start <- mean(poss.support[1:2])
+    } else if (Lhat==L.upper) {
+      start <- mean(poss.support[length(poss.support)-c(0,1)]) 
+    } else {
+      start <- Lhat
+    }
+    random.start <- rDirichDraw(1,start,bag)
     best.lower.L[i] <- optim(opt.transform(random.start),lower.target,bag=bag)$val
   }
   lower.limit <- min(best.lower.L)
