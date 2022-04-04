@@ -183,6 +183,7 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
       random.start <- rDirichDraw(1,start,bag)
       optim(opt.transform(random.start),lower.target,bag=bag)$val
     }
+    stopImplicitCluster()
   } else {
     for (i in 1:num.iters) {
       random.start <- rDirichDraw(1,start,bag)
