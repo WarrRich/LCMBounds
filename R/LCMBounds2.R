@@ -8,6 +8,9 @@
 #' @param num.iters A scalar which directs the alogrithm on how many random starting locations the optimizer should attempt.  Higher is better, but more costly computationally.
 #' @param power.of.2 A logical tuning parameter.  It is not recommended to change it from the default.
 #'
+#' @import foreach
+#' @import parallel
+#' @import doParallel
 #' @export
 #' @examples
 #' Lhat <- 7.8
@@ -16,7 +19,7 @@
 #' LCMBounds2(Lhat,weightsA,samplesizes)
 #'
 
-LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,num.iters=10,power.of.2=TRUE) {
+LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,num.iters=10,power.of.2=TRUE,parallel=FALSE) {
 
   ##################################
   # Some definitions of items needed
@@ -122,16 +125,25 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
   }
 
   best.upper.L <- rep(NA,num.iters)
-  for (i in 1:num.iters) {
-    if (Lhat==L.lower) {
-      start <- mean(poss.support[1:2])
-    } else if (Lhat==L.upper) {
-      start <- mean(poss.support[length(poss.support)-c(0,1)]) 
-    } else {
-      start <- Lhat
+  if (Lhat==L.lower) {
+    start <- mean(poss.support[1:2])
+  } else if (Lhat==L.upper) {
+    start <- mean(poss.support[length(poss.support)-c(0,1)]) 
+  } else {
+    start <- Lhat
+  }
+  if (parallel) {
+    numCores <- detectCores() - 2
+    registerDoParallel(numCores)
+    best.upper.L <- foreach (i=1:num.iters, .combine=c) %dopar% {
+      random.start <- rDirichDraw(1,start,bag)
+      -optim(opt.transform(random.start),upper.target,bag=bag)$val
     }
-    random.start <- rDirichDraw(1,start,bag)
-    best.upper.L[i] <- -optim(opt.transform(random.start),upper.target,bag=bag)$val
+  } else {
+    for (i in 1:num.iters) {
+      random.start <- rDirichDraw(1,start,bag)
+      best.upper.L[i] <- -optim(opt.transform(random.start),upper.target,bag=bag)$val
+    }
   }
   upper.limit <- max(best.upper.L)
 
@@ -166,16 +178,16 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
   }
 
   best.lower.L <- rep(NA,num.iters)
-  for (i in 1:num.iters) {
-    if (Lhat==L.lower) {
-      start <- mean(poss.support[1:2])
-    } else if (Lhat==L.upper) {
-      start <- mean(poss.support[length(poss.support)-c(0,1)]) 
-    } else {
-      start <- Lhat
+  if (parallel) {
+    best.lower.L <- foreach (i=1:num.iters, .combine=c) %dopar% {
+      random.start <- rDirichDraw(1,start,bag)
+      optim(opt.transform(random.start),lower.target,bag=bag)$val
     }
-    random.start <- rDirichDraw(1,start,bag)
-    best.lower.L[i] <- optim(opt.transform(random.start),lower.target,bag=bag)$val
+  } else {
+    for (i in 1:num.iters) {
+      random.start <- rDirichDraw(1,start,bag)
+      best.lower.L[i] <- optim(opt.transform(random.start),lower.target,bag=bag)$val
+    }
   }
   lower.limit <- min(best.lower.L)
   
