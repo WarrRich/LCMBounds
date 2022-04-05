@@ -146,6 +146,7 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
     }
   }
   upper.limit <- max(best.upper.L)
+  #upper.limit <- best.upper.L
 
   #########################
   # Finding the lower bound
@@ -191,6 +192,7 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
     }
   }
   lower.limit <- min(best.lower.L)
+  #lower.limit <- best.lower.L
   
   ################
   # Output
