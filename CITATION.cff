@@ -6,5 +6,5 @@ authors:
   orcid: "https://orcid.org/0000-0001-8508-3105"
 title: "Finding Bounds for Linear Combinations of Multinomial Probabilities"
 version: 1.0.0
-date-released: 2017-12-18
+date-released: 2023-05-29
 url: "https://github.com/WarrRich/LCMBounds"
