@@ -21,7 +21,7 @@
 
 LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,num.iters=10,power.of.2=TRUE,parallel=FALSE,seed=NULL) {
 
-  set.seed(seed, kind = "L'Ecuyer-CMRG")
+  set.seed(seed)
   
   ##################################
   # Some definitions of items needed
@@ -138,6 +138,7 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
     numCores <- detectCores() - 2
     registerDoParallel(numCores)
     best.upper.L <- foreach (i=1:num.iters, .combine=c) %dopar% {
+      set.seed(seed+i)
       random.start <- rDirichDraw(1,start,bag)
       -optim(opt.transform(random.start),upper.target,bag=bag)$val
     }
@@ -182,6 +183,7 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
   best.lower.L <- rep(NA,num.iters)
   if (parallel) {
     best.lower.L <- foreach (i=1:num.iters, .combine=c) %dopar% {
+      set.seed(seed+i)
       random.start <- rDirichDraw(1,start,bag)
       optim(opt.transform(random.start),lower.target,bag=bag)$val
     }
