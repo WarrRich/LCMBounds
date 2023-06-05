@@ -19,8 +19,10 @@
 #' LCMBounds2(Lhat,weightsA,samplesizes)
 #'
 
-LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,num.iters=10,power.of.2=TRUE,parallel=FALSE) {
+LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,num.iters=10,power.of.2=TRUE,parallel=FALSE,seed=NULL) {
 
+  set.seed(seed)
+  
   ##################################
   # Some definitions of items needed
   ##################################
