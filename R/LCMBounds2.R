@@ -21,7 +21,7 @@
 
 LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,num.iters=10,power.of.2=TRUE,parallel=FALSE,seed=NULL) {
 
-  set.seed(seed)
+  set.seed(seed, kind = "L'Ecuyer-CMRG")
   
   ##################################
   # Some definitions of items needed
@@ -148,7 +148,6 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
     }
   }
   upper.limit <- max(best.upper.L)
-  #upper.limit <- best.upper.L
 
   #########################
   # Finding the lower bound
@@ -194,15 +193,12 @@ LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=al
     }
   }
   lower.limit <- min(best.lower.L)
-  #lower.limit <- best.lower.L
-  
+
   ################
   # Output
   ################
   list(
     conf.int=c(lower.limit,upper.limit),
-    #estError=c(lower.estError,upper.estError),
-    #iters = c(lower.iters,upper.iters),
     LhatSupport = c(L.lower,L.upper),
     time = Sys.time()-start.time
   )
