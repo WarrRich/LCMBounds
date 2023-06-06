@@ -21,7 +21,7 @@
 
 LCMBounds2 <- function(Lhat,weights,samplesizes,alpha.upper=0.025,alpha.lower=alpha.upper,num.iters=10,power.of.2=TRUE,parallel=FALSE,seed=NULL) {
 
-  if (is.null(seed)) seed <- runif(1,0,1e+10)
+  if (is.null(seed)) seed <- as.integer(runif(1,0,1e+6))
   set.seed(seed)
   
   ##################################

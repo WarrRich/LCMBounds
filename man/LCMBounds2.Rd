@@ -12,7 +12,8 @@ LCMBounds2(
   alpha.lower = alpha.upper,
   num.iters = 10,
   power.of.2 = TRUE,
-  parallel = FALSE
+  parallel = FALSE,
+  seed = NULL
 )
 }
 \arguments{
